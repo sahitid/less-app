@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 /** Scroll progress (0..1) of a tall wrapper whose content is sticky. */
@@ -64,7 +63,35 @@ export function WordReveal({ text }: { text: string }) {
   );
 }
 
-type Slide = { src: string; alt: string; title: string; body: string };
+type Slide = { src: string; alt: string; title: string; body: string; mock: React.ReactNode };
+
+/**
+ * Shows the real screenshot when /screens/*.jpg exists in the deployment;
+ * falls back to a CSS-drawn mock of the same screen when it doesn't.
+ */
+function PhoneShot({ slide, active }: { slide: Slide; active: boolean }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div
+      className={`absolute inset-0 transition-opacity duration-500 ${
+        active ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      {failed ? (
+        slide.mock
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={slide.src}
+          alt={slide.alt}
+          className="h-full w-full object-cover"
+          onError={() => setFailed(true)}
+        />
+      )}
+    </div>
+  );
+}
 
 /**
  * Sticky phone showcase: the phone stays pinned while scrolling swaps
@@ -82,19 +109,12 @@ export function PhoneShowcase({ slides }: { slides: Slide[] }) {
     <div ref={wrapRef} className="relative" style={{ height: `${slides.length * 100 + 60}vh` }}>
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center gap-8 px-6 md:flex-row md:gap-20">
         {/* Phone */}
-        <div className="relative w-[210px] shrink-0 overflow-hidden rounded-[2.2rem] border border-neutral-800 sm:w-[250px]">
+        <div
+          className="relative w-[210px] shrink-0 overflow-hidden rounded-[2.2rem] border border-neutral-800 sm:w-[250px]"
+          style={{ aspectRatio: "358 / 780" }}
+        >
           {slides.map((slide, i) => (
-            <Image
-              key={slide.src}
-              src={slide.src}
-              alt={slide.alt}
-              width={358}
-              height={780}
-              priority={i === 0}
-              className={`h-auto w-full transition-opacity duration-500 ${
-                i === index ? "opacity-100" : "opacity-0"
-              } ${i === 0 ? "relative" : "absolute inset-0"}`}
-            />
+            <PhoneShot key={slide.src} slide={slide} active={i === index} />
           ))}
         </div>
 

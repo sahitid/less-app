@@ -4,24 +4,62 @@ import { PhoneShowcase, Reveal, WordReveal } from "./scroll";
 // (App Store Connect > TestFlight > External Testing > Public Link).
 const DOWNLOAD_URL = "https://testflight.apple.com/join/YOUR-CODE-HERE";
 
+// CSS-drawn stand-ins shown if the screenshot files aren't in the deployment.
+function HomeMock({ paper = false }: { paper?: boolean }) {
+  const bg = paper ? "bg-[#f7f5f0] text-[#121214]" : "bg-black text-white";
+  const card = paper ? "bg-white" : "bg-neutral-900";
+  const sub = paper ? "text-neutral-500" : "text-neutral-400";
+  return (
+    <div className={`flex h-full w-full flex-col gap-3 p-4 pt-8 text-left ${bg}`}>
+      <div className="text-lg font-semibold">&lt;</div>
+      <div className="text-xl font-semibold leading-none">Less</div>
+      <div className={`text-[9px] ${sub}`}>Scroll less. Live more.</div>
+      <div className={`rounded-xl p-3 ${card}`}>
+        <div className={paper ? "text-green-800" : "text-green-200/80"}>
+          <span className="text-lg font-light">0h 0m</span>
+        </div>
+        <div className={`text-[8px] ${sub}`}>reclaimed so far</div>
+      </div>
+      <div className={`flex-1 rounded-xl p-3 text-[11px] leading-relaxed ${card}`}>
+        {["Phone", "Messages", "Maps", "Camera", "Notes", "Music"].map((n) => (
+          <div key={n} className="py-0.5">{n}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BreatheMock() {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6 bg-black text-white">
+      <div className="text-xs font-light">Breathe out</div>
+      <div className="h-24 w-24 rounded-full border border-green-200/70 bg-green-200/5" />
+      <div className="text-[9px] text-neutral-500">3 breaths to go</div>
+    </div>
+  );
+}
+
 const slides = [
   {
     src: "/screens/home-ink.jpg",
     alt: "Less home screen in Ink theme",
     title: "Only what you need.",
     body: "Two widgets replace your app grid with a plain text list of your essential apps. Everything else stays out of sight.",
+    mock: <HomeMock />,
   },
   {
     src: "/screens/breathe.jpg",
     alt: "Breathing exercise before a distracting app opens",
     title: "Breathe before you scroll.",
     body: "Distracting apps open only after a guided breathing exercise. Just enough friction to ask: do I actually want this?",
+    mock: <BreatheMock />,
   },
   {
     src: "/screens/home-paper.jpg",
     alt: "Less home screen in Paper theme",
     title: "Ink or Paper.",
     body: "White on black, or black on white. The app, the widgets, and your wallpaper stay in sync either way.",
+    mock: <HomeMock paper />,
   },
 ];
 
