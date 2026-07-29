@@ -88,8 +88,8 @@ export function PhoneShowcase({ slides }: { slides: Slide[] }) {
               key={slide.src}
               src={slide.src}
               alt={slide.alt}
-              width={1206}
-              height={2622}
+              width={420}
+              height={913}
               priority={i === 0}
               className={`h-auto w-full transition-opacity duration-500 ${
                 i === index ? "opacity-100" : "opacity-0"

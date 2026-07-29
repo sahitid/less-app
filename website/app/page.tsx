@@ -6,19 +6,19 @@ const DOWNLOAD_URL = "https://testflight.apple.com/join/YOUR-CODE-HERE";
 
 const slides = [
   {
-    src: "/screens/home-ink.png",
+    src: "/screens/home-ink.jpg",
     alt: "Less home screen in Ink theme",
     title: "Only what you need.",
     body: "Two widgets replace your app grid with a plain text list of your essential apps. Everything else stays out of sight.",
   },
   {
-    src: "/screens/breathe.png",
+    src: "/screens/breathe.jpg",
     alt: "Breathing exercise before a distracting app opens",
     title: "Breathe before you scroll.",
     body: "Distracting apps open only after a guided breathing exercise. Just enough friction to ask: do I actually want this?",
   },
   {
-    src: "/screens/home-paper.png",
+    src: "/screens/home-paper.jpg",
     alt: "Less home screen in Paper theme",
     title: "Ink or Paper.",
     body: "White on black, or black on white. The app, the widgets, and your wallpaper stay in sync either way.",
