@@ -1,0 +1,11 @@
+# Xcode / iOS
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+
+# Website
+website/node_modules/
+website/.next/
+website/out/

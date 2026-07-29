@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.sahiti.less</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>less</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Less saves a solid-color wallpaper image to your Photos so you can set it as your Home Screen wallpaper.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+		<string>sms</string>
+		<string>mailto</string>
+		<string>facetime</string>
+		<string>maps</string>
+		<string>photos-redirect</string>
+		<string>camera</string>
+		<string>mobilenotes</string>
+		<string>calshow</string>
+		<string>x-apple-reminderkit</string>
+		<string>music</string>
+		<string>podcasts</string>
+		<string>ibooks</string>
+		<string>weather</string>
+		<string>shoebox</string>
+		<string>x-apple-health</string>
+		<string>x-web-search</string>
+		<string>whatsapp</string>
+		<string>tg</string>
+		<string>sgnl</string>
+		<string>spotify</string>
+		<string>slack</string>
+		<string>googlegmail</string>
+		<string>comgooglemaps</string>
+		<string>googlechrome</string>
+		<string>uber</string>
+		<string>venmo</string>
+		<string>instagram</string>
+		<string>tiktok</string>
+		<string>twitter</string>
+		<string>youtube</string>
+		<string>reddit</string>
+		<string>snapchat</string>
+	</array>
+</dict>
+</plist>
