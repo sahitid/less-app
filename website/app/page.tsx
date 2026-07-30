@@ -41,8 +41,8 @@ function BreatheMock() {
 
 const slides = [
   {
-    src: "/screens/home-ink.jpg",
-    alt: "Less home screen in Ink theme",
+    src: "/screens/home-widgets.jpg",
+    alt: "iPhone home screen with the Less widget listing essential apps",
     title: "Only what you need.",
     body: "Two widgets replace your app grid with a plain text list of your essential apps. Everything else stays out of sight.",
     mock: <HomeMock />,
@@ -53,6 +53,13 @@ const slides = [
     title: "Breathe before you scroll.",
     body: "Distracting apps open only after a guided breathing exercise. Just enough friction to ask: do I actually want this?",
     mock: <BreatheMock />,
+  },
+  {
+    src: "/screens/home-ink.jpg",
+    alt: "Less app showing time reclaimed and opens avoided",
+    title: "Watch the time come back.",
+    body: "Every pause you finish and every scroll you skip adds up. Less keeps score of the hours you take back.",
+    mock: <HomeMock />,
   },
   {
     src: "/screens/home-paper.jpg",
