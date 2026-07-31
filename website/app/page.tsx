@@ -1,8 +1,5 @@
 import { PhoneShowcase, Reveal, WordReveal } from "./scroll";
-
-// Swap this for your real TestFlight public link once the build is uploaded
-// (App Store Connect > TestFlight > External Testing > Public Link).
-const DOWNLOAD_URL = "https://testflight.apple.com/join/YOUR-CODE-HERE";
+import { WaitlistButton } from "./waitlist";
 
 // CSS-drawn stand-ins shown if the screenshot files aren't in the deployment.
 function HomeMock({ paper = false }: { paper?: boolean }) {
@@ -82,12 +79,10 @@ function Mark({ className = "" }: { className?: string }) {
 
 function DownloadButton({ label }: { label: string }) {
   return (
-    <a
-      href={DOWNLOAD_URL}
+    <WaitlistButton
+      label={label}
       className="inline-block rounded-full bg-white px-8 py-4 text-base font-medium text-black transition hover:bg-neutral-200"
-    >
-      {label}
-    </a>
+    />
   );
 }
 
@@ -101,12 +96,10 @@ export default function Home() {
             <Mark className="h-9 w-9 text-xl" />
             <span className="text-lg font-semibold tracking-tight">Less</span>
           </div>
-          <a
-            href={DOWNLOAD_URL}
+          <WaitlistButton
+            label="Download"
             className="rounded-full bg-white px-5 py-2 text-sm font-medium text-black transition hover:bg-neutral-200"
-          >
-            Download
-          </a>
+          />
         </div>
       </header>
 
@@ -124,10 +117,10 @@ export default function Home() {
           don&apos;t.
         </p>
         <div className="mt-10">
-          <DownloadButton label="Get Less on TestFlight" />
+          <DownloadButton label="Join the waitlist" />
         </div>
         <p className="mt-4 text-sm text-neutral-600">
-          Free · iPhone &amp; iPad · Installs via Apple&apos;s TestFlight app
+          Free · iPhone &amp; iPad · We&apos;ll email you when it&apos;s ready
         </p>
         <div className="mt-20 animate-bounce text-neutral-600">↓</div>
       </section>
@@ -171,7 +164,7 @@ export default function Home() {
             Do less. Live more.
           </p>
           <div className="mt-10">
-            <DownloadButton label="Get Less on TestFlight" />
+            <DownloadButton label="Join the waitlist" />
           </div>
         </Reveal>
       </section>
