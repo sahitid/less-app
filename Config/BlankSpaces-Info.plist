@@ -13,8 +13,8 @@
 			</array>
 		</dict>
 	</array>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Less saves a solid-color wallpaper image to your Photos so you can set it as your Home Screen wallpaper.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tel</string>
@@ -51,5 +51,7 @@
 		<string>reddit</string>
 		<string>snapchat</string>
 	</array>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Less saves a solid-color wallpaper image to your Photos so you can set it as your Home Screen wallpaper.</string>
 </dict>
 </plist>

@@ -23,6 +23,7 @@ targets:
       path: Config/BlankSpaces-Info.plist
       properties:
         UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
         CFBundleURLTypes:
           - CFBundleURLName: com.sahiti.less
             CFBundleURLSchemes: [less]
