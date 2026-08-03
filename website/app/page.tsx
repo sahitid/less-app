@@ -170,7 +170,13 @@ export default function Home() {
       </section>
 
       <footer className="flex flex-col items-center gap-2 border-t border-neutral-900 px-6 py-10 text-center text-sm text-neutral-600">
-        <span>Less, a personal project.</span>
+        <span>
+          Less,{" "}
+          <a href="https://sahiti.dev" className="underline hover:text-neutral-400">
+            a personal project
+          </a>
+          .
+        </span>
         <span>
           Inspired by{" "}
           <a
