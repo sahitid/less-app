@@ -1,6 +1,8 @@
 import { PhoneShowcase, Reveal, WordReveal } from "./scroll";
 import { WaitlistButton } from "./waitlist";
 
+const TESTFLIGHT_URL = "https://testflight.apple.com/join/YVtm12EW";
+
 // CSS-drawn stand-ins shown if the screenshot files aren't in the deployment.
 function HomeMock({ paper = false }: { paper?: boolean }) {
   const bg = paper ? "bg-[#f7f5f0] text-[#121214]" : "bg-black text-white";
@@ -79,10 +81,12 @@ function Mark({ className = "" }: { className?: string }) {
 
 function DownloadButton({ label }: { label: string }) {
   return (
-    <WaitlistButton
-      label={label}
+    <a
+      href={TESTFLIGHT_URL}
       className="inline-block rounded-full bg-white px-8 py-4 text-base font-medium text-black transition hover:bg-neutral-200"
-    />
+    >
+      {label}
+    </a>
   );
 }
 
@@ -96,10 +100,12 @@ export default function Home() {
             <Mark className="h-9 w-9 text-xl" />
             <span className="text-lg font-semibold tracking-tight">Less</span>
           </div>
-          <WaitlistButton
-            label="Download"
+          <a
+            href={TESTFLIGHT_URL}
             className="rounded-full bg-white px-5 py-2 text-sm font-medium text-black transition hover:bg-neutral-200"
-          />
+          >
+            Download
+          </a>
         </div>
       </header>
 
@@ -116,11 +122,15 @@ export default function Home() {
           screen with the apps you need, and a deep breath before the ones you
           don&apos;t.
         </p>
-        <div className="mt-10">
-          <DownloadButton label="Join the waitlist" />
+        <div className="mt-10 flex flex-col items-center gap-4">
+          <DownloadButton label="Get the beta on TestFlight" />
+          <WaitlistButton
+            label="or join the mailing list for updates"
+            className="text-sm text-neutral-500 underline transition hover:text-neutral-300"
+          />
         </div>
         <p className="mt-4 text-sm text-neutral-600">
-          Free · iPhone &amp; iPad · We&apos;ll email you when it&apos;s ready
+          Free · iPhone &amp; iPad · Installs via Apple&apos;s TestFlight app
         </p>
         <div className="mt-20 animate-bounce text-neutral-600">↓</div>
       </section>
@@ -164,7 +174,7 @@ export default function Home() {
             Do less. Live more.
           </p>
           <div className="mt-10">
-            <DownloadButton label="Join the waitlist" />
+            <DownloadButton label="Get the beta on TestFlight" />
           </div>
         </Reveal>
       </section>

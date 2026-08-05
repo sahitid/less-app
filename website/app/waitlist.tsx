@@ -62,7 +62,14 @@ function WaitlistModal({ onClose }: { onClose: () => void }) {
               You&apos;re on the list.
             </h3>
             <p className="mt-3 text-neutral-400">
-              We&apos;ll email you as soon as Less is ready to download.
+              We&apos;ll keep you posted as Less evolves. Can&apos;t wait?{" "}
+              <a
+                href="https://testflight.apple.com/join/YVtm12EW"
+                className="text-white underline hover:text-neutral-300"
+              >
+                Get the beta now
+              </a>
+              .
             </p>
             <button
               onClick={onClose}
@@ -74,10 +81,11 @@ function WaitlistModal({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <h3 className="text-2xl font-semibold tracking-tight">
-              Join the waitlist
+              Stay in the loop
             </h3>
             <p className="mt-2 text-sm text-neutral-400">
-              Less is almost ready. Leave your email and be first in line.
+              Leave your email for updates on new features and the App Store
+              launch.
             </p>
             <form onSubmit={submit} className="mt-6 flex flex-col gap-3">
               <input
