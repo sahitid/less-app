@@ -10,13 +10,31 @@ struct BreathingGateView: View {
 
     private enum Phase { case inhale, exhale, done }
 
+    private static let intentOptions = ["Reply to someone", "Look something up", "Post something", "Just bored"]
+
     @State private var phase: Phase = .inhale
-    @State private var breathsRemaining = SharedStore.breathCount
+    @State private var breathsRemaining: Int
     @State private var scale: CGFloat = 0.45
+    @State private var intent: String?
+    @State private var sessionMinutes = SharedStore.sessionMinutes
+
+    /// True when reopening within the window bumped the breath count.
+    private let escalated: Bool
 
     private let breathDuration: Double = 4
 
     private var pal: Palette { store.palette }
+
+    init(app: LaunchableApp) {
+        self.app = app
+        let extra = SharedStore.escalationBreaths(for: app.scheme)
+        let breaths = min(SharedStore.breathCount + extra, BlankSpacesConfig.maxBreaths)
+        _breathsRemaining = State(initialValue: breaths)
+        escalated = extra > 0
+    }
+
+    /// "Just bored" flips the emphasis: closing becomes the primary action.
+    private var bored: Bool { intent == "Just bored" }
 
     var body: some View {
         ZStack {
@@ -39,40 +57,20 @@ struct BreathingGateView: View {
                 Spacer()
 
                 if phase == .done {
-                    VStack(spacing: 18) {
-                        Button {
-                            store.stats.pausesCompleted += 1
-                            store.open(app)
-                            dismiss()
-                        } label: {
-                            Text("Open \(app.name)")
-                                .font(.system(size: 17, weight: .medium))
-                                .foregroundStyle(pal.background)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(pal.textPrimary, in: Capsule())
-                        }
-
-                        Button {
-                            store.stats.pausesCompleted += 1
-                            store.stats.opensAvoided += 1
-                            dismiss()
-                        } label: {
-                            Text("Never mind, reclaim my time")
-                                .font(.system(size: 15))
-                                .foregroundStyle(pal.sage)
-                        }
-                    }
-                    .padding(.horizontal, 40)
-                    .padding(.bottom, 40)
-                    .transition(.opacity)
+                    doneControls
+                        .transition(.opacity)
                 } else {
                     VStack(spacing: 12) {
                         Text("\(breathsRemaining) breath\(breathsRemaining == 1 ? "" : "s") to go")
                             .font(.system(size: 14))
                             .foregroundStyle(pal.textSecondary)
+                        if escalated {
+                            Text("Back again so soon? A few extra breaths this time.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(pal.amber.opacity(0.8))
+                        }
                         Button("Give up") {
-                            store.stats.opensAvoided += 1
+                            store.stats.recordOpenAvoided()
                             dismiss()
                         }
                         .font(.system(size: 14))
@@ -82,7 +80,120 @@ struct BreathingGateView: View {
                 }
             }
         }
-        .onAppear(perform: runBreath)
+        .onAppear {
+            SharedStore.noteGateShown(for: app.scheme)
+            runBreath()
+        }
+    }
+
+    private var doneControls: some View {
+        VStack(spacing: 24) {
+            // Intention prompt
+            VStack(spacing: 10) {
+                Text("What for?")
+                    .font(.system(size: 13))
+                    .foregroundStyle(pal.textSecondary)
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                    ForEach(Self.intentOptions, id: \.self) { option in
+                        Button {
+                            withAnimation(.easeOut(duration: 0.2)) { intent = option }
+                        } label: {
+                            Text(option)
+                                .font(.system(size: 13))
+                                .foregroundStyle(intent == option ? pal.background : pal.textPrimary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                                .background(
+                                    intent == option ? pal.textPrimary : pal.surface,
+                                    in: Capsule()
+                                )
+                        }
+                    }
+                }
+            }
+
+            // Session timebox
+            VStack(spacing: 10) {
+                Text("For how long?")
+                    .font(.system(size: 13))
+                    .foregroundStyle(pal.textSecondary)
+                HStack(spacing: 8) {
+                    ForEach([5, 10, 15], id: \.self) { minutes in
+                        Button {
+                            sessionMinutes = minutes
+                        } label: {
+                            Text("\(minutes) min")
+                                .font(.system(size: 13))
+                                .foregroundStyle(sessionMinutes == minutes ? pal.background : pal.textPrimary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                                .background(
+                                    sessionMinutes == minutes ? pal.textPrimary : pal.surface,
+                                    in: Capsule()
+                                )
+                        }
+                    }
+                }
+            }
+
+            VStack(spacing: 14) {
+                if bored {
+                    reclaimButton(primary: true)
+                    openButton(primary: false)
+                } else {
+                    openButton(primary: true)
+                    reclaimButton(primary: false)
+                }
+            }
+        }
+        .padding(.horizontal, 40)
+        .padding(.bottom, 32)
+    }
+
+    private func openButton(primary: Bool) -> some View {
+        Button {
+            store.stats.recordPauseCompleted()
+            if let intent { store.stats.recordIntent(intent) }
+            SharedStore.sessionMinutes = sessionMinutes
+            SessionNudge.schedule(minutes: sessionMinutes, appName: app.name)
+            store.open(app)
+            dismiss()
+        } label: {
+            if primary {
+                Text("Open \(app.name) for \(sessionMinutes) min")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(pal.background)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(pal.textPrimary, in: Capsule())
+            } else {
+                Text("Open \(app.name) anyway")
+                    .font(.system(size: 15))
+                    .foregroundStyle(pal.textTertiary)
+            }
+        }
+    }
+
+    private func reclaimButton(primary: Bool) -> some View {
+        Button {
+            store.stats.recordPauseCompleted()
+            store.stats.recordOpenAvoided()
+            if let intent { store.stats.recordIntent(intent) }
+            dismiss()
+        } label: {
+            if primary {
+                Text("Never mind, reclaim my time")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(pal.background)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(pal.sage, in: Capsule())
+            } else {
+                Text("Never mind, reclaim my time")
+                    .font(.system(size: 15))
+                    .foregroundStyle(pal.sage)
+            }
+        }
     }
 
     private var label: String {

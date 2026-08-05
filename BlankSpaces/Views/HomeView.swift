@@ -14,6 +14,9 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: Space.xl) {
                         header
                         reclaimedCard
+                        if showWeeklyReview {
+                            weeklyReviewCard
+                        }
                         if !store.wallpaperDone {
                             wallpaperNudge
                         }
@@ -66,11 +69,63 @@ struct HomeView: View {
             HStack(spacing: Space.xl) {
                 stat(value: store.stats.pausesCompleted, label: "pauses taken", color: pal.mist)
                 stat(value: store.stats.opensAvoided, label: "opens avoided", color: pal.amber)
+                if store.stats.streakDays > 1 {
+                    stat(value: store.stats.streakDays, label: "day streak", color: pal.sage)
+                }
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Space.lg)
         .background(pal.surface, in: RoundedRectangle(cornerRadius: 20))
+    }
+
+    /// Shown at the week boundary (Sunday/Monday): this week next to last week.
+    private var showWeeklyReview: Bool {
+        let weekday = Calendar.current.component(.weekday, from: .now)
+        return (weekday == 1 || weekday == 2) && store.stats.lastWeek.pauses + store.stats.lastWeek.avoided > 0
+    }
+
+    private var weeklyReviewCard: some View {
+        VStack(alignment: .leading, spacing: Space.md) {
+            Text("YOUR WEEK")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(pal.textTertiary)
+                .kerning(1.2)
+
+            HStack(spacing: Space.xl) {
+                weekColumn(title: "This week", week: store.stats.thisWeek, emphasized: true)
+                weekColumn(title: "Last week", week: store.stats.lastWeek, emphasized: false)
+            }
+
+            Text(weeklyLine)
+                .font(.system(size: 13))
+                .foregroundStyle(pal.textSecondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Space.lg)
+        .background(pal.surface, in: RoundedRectangle(cornerRadius: 20))
+    }
+
+    private var weeklyLine: String {
+        let now = store.stats.thisWeek.avoided
+        let then = store.stats.lastWeek.avoided
+        if now > then { return "More scrolls skipped than last week. Keep going." }
+        if now == then { return "Holding steady. Every pause counts." }
+        return "A softer week. That's okay — the widgets are still there."
+    }
+
+    private func weekColumn(title: String, week: WeekStats, emphasized: Bool) -> some View {
+        VStack(alignment: .leading, spacing: Space.xxs) {
+            Text(title)
+                .font(.system(size: 13))
+                .foregroundStyle(pal.textTertiary)
+            Text("\(week.avoided * 12)m")
+                .font(.system(size: 24, weight: .medium))
+                .foregroundStyle(emphasized ? pal.sage : pal.textSecondary)
+            Text("\(week.pauses) pause\(week.pauses == 1 ? "" : "s") · \(week.avoided) avoided")
+                .font(.system(size: 12))
+                .foregroundStyle(pal.textTertiary)
+        }
     }
 
     private func stat(value: Int, label: String, color: Color) -> some View {
