@@ -71,11 +71,12 @@ const slides = [
 
 function Mark({ className = "" }: { className?: string }) {
   return (
-    <span
-      className={`flex items-center justify-center rounded-[10px] bg-white font-semibold text-black ${className}`}
-    >
-      &lt;
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/mark.png"
+      alt="Less logo"
+      className={`border border-neutral-800 ${className}`}
+    />
   );
 }
 
@@ -97,7 +98,7 @@ export default function Home() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/70 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <Mark className="h-9 w-9 text-xl" />
+            <Mark className="h-9 w-9 rounded-[10px]" />
             <span className="text-lg font-semibold tracking-tight">Less</span>
           </div>
           <a
@@ -111,7 +112,7 @@ export default function Home() {
 
       {/* Hero */}
       <section className="flex min-h-screen flex-col items-center justify-center px-6 pt-24 text-center">
-        <Mark className="h-16 w-16 rounded-2xl text-4xl" />
+        <Mark className="h-16 w-16 rounded-2xl" />
         <h1 className="mt-10 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
           Your phone,
           <br />

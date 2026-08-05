@@ -55,9 +55,12 @@ function WaitlistModal({ onClose }: { onClose: () => void }) {
       >
         {status === "done" ? (
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl font-semibold text-black">
-              &lt;
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/mark.png"
+              alt="Less logo"
+              className="mx-auto h-12 w-12 rounded-xl border border-neutral-800"
+            />
             <h3 className="mt-6 text-2xl font-semibold tracking-tight">
               You&apos;re on the list.
             </h3>

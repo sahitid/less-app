@@ -11,6 +11,8 @@ export default async function Image() {
     join(process.cwd(), "public/screens/home-widgets.jpg")
   );
   const src = `data:image/jpeg;base64,${screenshot.toString("base64")}`;
+  const mark = await readFile(join(process.cwd(), "public/mark.png"));
+  const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -32,22 +34,15 @@ export default async function Image() {
             paddingRight: 60,
           }}
         >
-          <div
+          <img
+            src={markSrc}
+            width={96}
+            height={96}
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 96,
-              height: 96,
               borderRadius: 24,
-              background: "#fff",
-              color: "#000",
-              fontSize: 64,
-              fontWeight: 700,
+              border: "1px solid #2a2a2a",
             }}
-          >
-            &lt;
-          </div>
+          />
           <div
             style={{
               marginTop: 48,
