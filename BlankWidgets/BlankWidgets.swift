@@ -102,16 +102,14 @@ struct BlankTopWidget: Widget {
 struct BlankBottomWidgetView: View {
     let entry: BlankEntry
 
-    private var overflowApps: [LaunchableApp] {
-        Array(entry.apps.dropFirst(4).prefix(8))
+    private var listedApps: [LaunchableApp] {
+        Array(entry.apps.prefix(8))
     }
 
     var body: some View {
         Group {
-            if overflowApps.isEmpty {
-                Text(entry.apps.isEmpty
-                     ? "Open Less to\nchoose your apps"
-                     : "Add more apps in Less\nto fill this widget")
+            if listedApps.isEmpty {
+                Text("Open Less to\nchoose your apps")
                     .font(.system(size: 15))
                     .foregroundStyle(entry.secondaryColor)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -119,11 +117,12 @@ struct BlankBottomWidgetView: View {
                     .lineSpacing(3)
             } else {
                 // Fixed row height, top-aligned: a short list stays calm
-                // instead of stretching two rows across the whole widget.
-                VStack(alignment: .leading, spacing: 6) {
-                    ForEach(overflowApps) { app in
+                // instead of stretching a few rows across the whole widget.
+                // 8 rows × 32 + 7 × 4 spacing fits the large widget without clipping.
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(listedApps) { app in
                         AppRow(app: app, color: entry.textColor)
-                            .frame(height: 36)
+                            .frame(height: 32)
                     }
                     Spacer(minLength: 0)
                 }
@@ -140,8 +139,8 @@ struct BlankBottomWidget: Widget {
         StaticConfiguration(kind: "BlankBottomWidget", provider: BlankProvider()) { entry in
             BlankBottomWidgetView(entry: entry)
         }
-        .configurationDisplayName("Bottom")
-        .description("The rest of your essential apps.")
+        .configurationDisplayName("List")
+        .description("All of your essential apps, up to eight.")
         .supportedFamilies([.systemLarge])
         .contentMarginsDisabled()
     }
